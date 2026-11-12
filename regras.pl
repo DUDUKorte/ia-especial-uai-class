@@ -1,13 +1,15 @@
-% ==============================================================================
-% SISTEMA ESPECIALISTA: Gerador de Plano de Aula e Auditoria UAI (Unreal Engine)
-% Disciplina: Inteligencia Artificial - UNIOESTE Cascavel
+% SISTEMA ESPECIALISTA: Gerador de Plano de Aula e Auditoria para Unreal Engine
+% ALUNOS: Eduardo Nogueira Korte, Matheus Seghatti de Moraes, Thiago Oliveira Dupim, Vitor Krieser
 % Representacao: Regras de Producao | Inferencia: Backward Chaining | Dedutivo
-% ==============================================================================
 
+
+% determina que fato é dinamico e tem dois argumentos
 :- dynamic fato/2.
 
 iniciar :-
+    % garante que o predicado inicie vazio
     retractall(fato(_, _)),
+
     writeln('=========================================================================='),
     writeln('   SISTEMA ESPECIALISTA AVANCADO - UNREAL AUTHORIZED INSTRUCTOR (UAI)     '),
     writeln('=========================================================================='),
@@ -16,12 +18,10 @@ iniciar :-
     coletar_dados,
     gerar_plano_completo.
 
-% ==============================================================================
-% 1. MODULO DE AQUISICAO DE CONHECIMENTO (QUESTIONARIO INTERATIVO)
-% ==============================================================================
 
+% COLETANDO DADOS ATRAVÉS DE UM QUESTIONARIO INTERATIVO
 coletar_dados :-
-    % Pergunta 1: Tema da Aula
+    % tema da aula
     writeln('--- [ETAPA 1: ESCOPO PEDAGOGICO E LEARNING OUTCOMES] ---'),
     writeln('1. Qual e o tema principal da sua aula na Unreal Engine?'),
     writeln('   1 - Blueprints e Logica de Gameplay'),
@@ -31,7 +31,7 @@ coletar_dados :-
     writeln('   5 - Materiais, Texturas (Power of 2) e Fotogrametria'),
     perguntar(tema, 'Escolha (1 a 5): '),
 
-    % Pergunta 2: Tipo de Verbo pensado pelo Instrutor
+    % tipo de verbo pensado pelo instrutor
     writeln('\n2. Como voce estruturou o verbo do seu Learning Outcome (Objetivo de Aprendizagem)?'),
     writeln('   1 - Usei verbos subjetivos/amplos (ex: "Entender...", "Aprender...", "Usar Blueprints")'),
     writeln('   2 - Combinei dois verbos na mesma frase (ex: "Explicar e aplicar...", "Entender e criar...")'),
@@ -39,14 +39,14 @@ coletar_dados :-
     writeln('   4 - Usei um unico verbo pratico/construtivo (ex: "Criar...", "Montar...", "Aplicar...")'),
     perguntar(verbo_status, 'Escolha (1 a 4): '),
 
-    % Pergunta 3: Intencao Pedagogica (Define Video Type)
+    % intencao pedagogica
     writeln('\n3. O que voce espera que o aluno faca ao assistir sua aula?'),
     writeln('   1 - Compreenda um conceito teorico, definicao ou comparativo rapido (sem abrir a engine)'),
     writeln('   2 - Veja os bastidores de como eu resolvi um problema complexo (foco em workflow/inspiracao)'),
     writeln('   3 - Siga cada clique na tela para construir o mesmo resultado do zero por conta propria'),
     perguntar(intencao_aluno, 'Escolha (1 a 3): '),
 
-    % Pergunta 4: Estrategia de Sequencia de Gravacao
+    %  estrategia de sequencia de gravacao
     writeln('\n--- [ETAPA 2: ROTEIRIZACAO E DIDATICA DE GRAVACAO] ---'),
     writeln('4. Em qual ordem voce pretende gravar os arquivos do video?'),
     writeln('   1 - Gravar a introducao e o contexto teorico primeiro, e depois gravar a pratica'),
@@ -54,14 +54,14 @@ coletar_dados :-
     writeln('   3 - Gravar tudo em um unico take continuo (sem dividir em segmentos curtos)'),
     perguntar(ordem_gravacao, 'Escolha (1 a 3): '),
 
-    % Pergunta 5: Abordagem de Erros e Duvidas
+    % abordagem de erros e duvidas
     writeln('\n5. Como voce planeja lidar com erros ou passos dificeis durante a gravacao?'),
     writeln('   1 - Editar e cortar qualquer erro para parecer que fiz tudo perfeito de primeira'),
     writeln('   2 - Incluir/cometer um erro comum de proposito para ensinar o aluno a fazer troubleshooting'),
     writeln('   3 - Pular etapas basicas/repetitivas no video para economizar tempo'),
     perguntar(abordagem_erros, 'Escolha (1 a 3): '),
 
-    % Pergunta 6: Densidade dos Slides
+    % densidade dos slides
     writeln('\n--- [ETAPA 3: DESIGN DE SLIDES E APOIO VISUAL] ---'),
     writeln('6. Como estao formatados os textos nos seus slides de apoio?'),
     writeln('   1 - Nao utilizarei slides em nenhum momento (100% tela da Unreal Engine)'),
@@ -69,14 +69,14 @@ coletar_dados :-
     writeln('   3 - Topicos curtos (bullets concisos), palavras-chave e destaque nos key takeaways'),
     perguntar(texto_slides, 'Escolha (1 a 3): '),
 
-    % Pergunta 7: Visual dos Slides
+    % visual dos slides
     writeln('\n7. Como esta o layout visual e grafico dos seus slides?'),
     writeln('   1 - Varios prints/imagens na mesma tela, fontes variadas ou efeitos visuais chamativos'),
     writeln('   2 - Padrao consistente de fontes/cores e apenas 1 visual representativo por slide'),
     writeln('   3 - Nao se aplica (sem slides) ou apenas texto em fundo solido'),
     perguntar(visual_slides, 'Escolha (1 a 3): '),
 
-    % Pergunta 8: Camera e Presenca
+    % camera e presenca
     writeln('\n--- [ETAPA 4: HARDWARE, CENARIO E ILUMINACAO] ---'),
     writeln('8. Qual equipamento de camera voce vai utilizar?'),
     writeln('   1 - Nao vou aparecer (100% Voiceover / Narracao em off)'),
@@ -84,14 +84,14 @@ coletar_dados :-
     writeln('   3 - Camera externa (USB/DSLR) posicionada na altura dos olhos'),
     perguntar(camera_tipo, 'Escolha (1 a 3): '),
 
-    % Pergunta 9: Cenario e Iluminacao
+    % cenario e iluminacao
     writeln('\n9. Como e o seu ambiente fisico de gravacao (fundo e luz)?'),
     writeln('   1 - Luz natural da janela e fundo movimentado (estante cheia, objetos, logos/marcas)'),
     writeln('   2 - Luz artificial controlada (Ring Light/Softbox), mas fundo com muitos objetos/livros'),
     writeln('   3 - Luz artificial controlada (sem sombras/reflexos) e fundo limpo/profissional'),
     perguntar(ambiente_luz, 'Escolha (1 a 3): '),
 
-    % Pergunta 10: Microfone
+    % microfone
     writeln('\n10. Qual dispositivo de captura de audio voce vai utilizar?'),
     writeln('   1 - Microfone interno do notebook ou da webcam'),
     writeln('   2 - Fone de ouvido comum (TWS/Bluetooth ou fone simples de celular)'),
@@ -99,7 +99,7 @@ coletar_dados :-
     writeln('   4 - Microfone externo dedicado para voz (padrao cardioide em braco articulado/pedestal)'),
     perguntar(microfone_tipo, 'Escolha (1 a 4): '),
 
-    % Pergunta 11: Sistema Operacional
+    % sistema operacional
     writeln('\n--- [ETAPA 5: SISTEMA OPERACIONAL E POS-PRODUCAO] ---'),
     writeln('11. Qual Sistema Operacional voce utiliza na maquina de gravacao?'),
     writeln('   1 - Windows 10'),
@@ -107,7 +107,7 @@ coletar_dados :-
     writeln('   3 - macOS (Mac)'),
     perguntar(sistema_op, 'Escolha (1 a 3): '),
 
-    % Pergunta 12: Preferencia de Software de Edicao
+    % preferencia de software de edicao
     writeln('\n12. Qual e a sua prioridade para o software de edicao de video?'),
     writeln('   1 - Gratuito, nativo e ultra simples (cortes basicos em videos de ate 30 min)'),
     writeln('   2 - Gratuito, mas profissional (exportacao ate 4K, correcao de cor, audio e Cut Page rapida)'),
@@ -120,11 +120,9 @@ perguntar(Atributo, Prompt) :-
     read(Valor),
     assertz(fato(Atributo, Valor)).
 
-% ==============================================================================
-% 2. BASE DE CONHECIMENTO (REGRAS DE PRODUCAO E INFERENCIA)
-% ==============================================================================
+% BASE DE CONHECIMENTO
 
-% --- 2.1 Regras de Classificacao do Formato de Aula (Video Type) ---
+% regras de classificacao do formato de aula
 definir_formato('EXPLAINER (Video Explicativo Conceitual)',
                 'Curta (5 a 8 minutos no total)',
                 'Foco em conhecimento adquirido (definir termos com fontes e evitar scope creep).') :-
@@ -140,7 +138,7 @@ definir_formato('TUTORIAL (Pratica Passo a Passo Replicavel)',
                 'Foco em habilitar o aluno a reproduzir o processo sozinho sem pular etapas.') :-
     fato(intencao_aluno, _).
 
-% --- 2.2 Regras de Auditoria do Learning Outcome ---
+% regras de auditoria do learning outcome (resultado de aprendizagem)
 auditar_verbo('REPROVADO (Verbo Vago/Escopo Gigante): O termo "Entender" ou escopos amplos nao podem ser medidos em um teste pratico. Troque por um verbo mensuravel.') :-
     fato(verbo_status, 1), !.
 auditar_verbo('REPROVADO (Objetivo Duplo): Voce misturou dois verbos na mesma frase. Separe em 2 Learning Outcomes distintos (um conceitual e outro pratico).') :-
@@ -151,7 +149,7 @@ auditar_verbo('ALERTA DE INCONSISTENCIA: Voce escolheu um verbo pratico (Criar/M
     fato(verbo_status, 4), fato(intencao_aluno, 1), !.
 auditar_verbo('APROVADO: O verbo escolhido e unico, mensuravel e esta perfeitamente alinhado com o formato da aula.').
 
-% --- 2.3 Gerador de Exemplo de Learning Outcome Oficial por Tema ---
+% gerador de exemplo de learning outcome oficial por tema ---
 sugerir_outcome('Teorico: "Explicar o fluxo de execucao de Eventos em Blueprints" | Pratico: "Criar a resposta de um personagem a um estimulo usando Blueprints".') :-
     fato(tema, 1), !.
 sugerir_outcome('Teorico: "Definir Lumen na Unreal Engine" ou "Comparar os usos de Sky Lights e Directional Lights" | Pratico: "Aplicar ray tracing em uma cena especifica".') :-
@@ -163,7 +161,7 @@ sugerir_outcome('Teorico: "Explicar como usar um Cine Camera Actor para capturar
 sugerir_outcome('Teorico: "Explicar por que dimensoes de textura em potencia de 2 (Power of 2) afetam o streaming de memoria" | Pratico: "Importar e configurar um modelo escaneado via fotogrametria na Unreal Engine".') :-
     fato(tema, _).
 
-% --- 2.4 Gerador da Tabela de Planejamento de 5 Colunas (Padrao Unreal Academy) ---
+% Gerador da tabela de planejamento de 5 Colunas (padrao Unreal Academy)
 gerar_tabela_segmentos([
     'SEG 1: Introducao         | On Camera      | Slides (Agenda + Learning Outcomes) | Apresentar credenciais e declarar meta da aula | 2 min',
     'SEG 2: Definicao de Termos| Voiceover      | Slides concisos + Fontes tecnicas   | Definir conceitos-chave sem fugir do escopo    | 3 min',
@@ -187,7 +185,7 @@ gerar_tabela_segmentos([
     'SEG 6: Conclusao          | On Camera      | Resultado final + Slide de Revisao  | Revisar etapas vencidas e convidar a praticar  | 2 min'
 ]) :- fato(intencao_aluno, _).
 
-% --- 2.5 Regras de Estrategia de Gravacao e Didatica ---
+% regras de estrategia de gravacao e didatica
 avaliar_sequencia_gravacao('OTIMA ESCOLHA (Contexto -> Pratica): Gravar o contexto primeiro ajuda a lembrar de integrar essa informacao durante o resto do video.') :-
     fato(ordem_gravacao, 1), !.
 avaliar_sequencia_gravacao('OTIMA ESCOLHA (Pratica -> Contexto): Gravar a pratica primeiro ajuda a descobrir os principais takeaways para citar depois na introducao e conclusao.') :-
@@ -202,7 +200,7 @@ avaliar_didatica_erros('EXCELENTE (Troubleshooting Ativo): Mostrar a correcao de
 avaliar_didatica_erros('ERRO GRAVE DE DIDATICA: NUNCA pule etapas em um video de ensino! O aluno nao sabera por que voce pulou aquilo, gerando frustracao e abandono da aula.') :-
     fato(abordagem_erros, _).
 
-% --- 2.6 Regras de Auditoria de Slides ---
+% Regras de Auditoria de Slides
 avaliar_slides('ALERTA DE PAUSA VISUAL: Em tutoriais longos, considere adicionar slides pontuais fora da captura de tela para sinalizar quando um ponto conceitual importante nao faz parte do clique a clique.') :-
     fato(texto_slides, 1), fato(intencao_aluno, 3), !.
 avaliar_slides('Sem uso de slides: Certifique-se de usar zoom e destaques visuais (caixas e setas) na edicao.') :-
@@ -215,7 +213,7 @@ avaliar_slides('ALERTA (Inconsistent Graphics): Seus textos sao curtos, mas o vi
     fato(visual_slides, 1), !.
 avaliar_slides('APROVADO (Concise & Consistent Formatting): Slides diretos ao ponto, relevantes, com destaque para key takeaways e 1 visual representativo.').
 
-% --- 2.7 Regras de Equipamento (Camera, Luz, Cenario e Audio) ---
+% equipamento (camera, luz, cenario e audio)
 avaliar_camera_luz('MODO VOICEOVER: Como voce nao aparecera na camera, compense variando o ritmo e tom da voz (baixe o volume para criar atencao, acelere para mostrar empolgacao, fale devagar em pontos vitais).') :-
     fato(camera_tipo, 1), !.
 avaliar_camera_luz('ALERTA DE CAMERA E LUZ: Webcam de notebook tem angulo ruim (eleve a tela!) e luz natural muda durante a gravacao. Feche a cortina, use luz frontal constante e aplique blur (desfoque) no fundo ocupado, removendo marcas/logos.') :-
@@ -234,7 +232,7 @@ avaliar_audio('BOM (Headset Extensivel): Posicione a haste perto da boca (mas fo
     fato(microfone_tipo, 3), !.
 avaliar_audio('EXCELENTE (Microfone Externo Cardioide): Foco total na voz! Ajuste a distancia no braco/pedestal e regule o ganho (gain) antes de gravar para nao estourar o audio (clipping).').
 
-% --- 2.8 Regras Combinadas de Software (SO + Perfil de Edicao) ---
+% regras combinadas de software (SO + perfil de edicao)
 recomendar_stack_software('CAPTURA: Xbox Game Bar (Win+Alt+R - grava 1 janela por vez) + Camera App | EDICAO: Clipchamp (nativo, gratuito para videos de ate 30 min).') :-
     fato(sistema_op, 1), fato(perfil_edicao, 1), !.
 recomendar_stack_software('CAPTURA: Snipping Tool (Win+Shift+S - grava janela ou area da tela) + Camera App | EDICAO: Clipchamp (nativo do Windows 11).') :-
@@ -248,10 +246,8 @@ recomendar_stack_software('CAPTURA + EDICAO INTEGRADA: Camtasia (Grava tela e ca
 recomendar_stack_software('EDICAO AVANCADA COM IA: Adobe Premiere Pro (Permite editar o video cortando e colando o texto da transcricao automatica e possui recurso de IA para clareza da fala).') :-
     fato(perfil_edicao, _).
 
-% ==============================================================================
-% 3. EXIBICAO DO PLANO DE AULA E RELATORIO TECNICO DO ESPECIALISTA
-% ==============================================================================
 
+% EXIBICAO DO PLANO DE AULA E RELATORIO TECNICO DO ESPECIALISTA
 gerar_plano_completo :-
     nl,
     writeln('=========================================================================='),
@@ -312,3 +308,87 @@ listar_linhas([H|T]) :-
     format('   ~w~n', [H]),
     listar_linhas(T).
     
+
+% ESTRUTURA DO QUESTIONÁRIO
+% etapa(Id, Nome).
+    etapa(1, 'Escopo pedagogico e Learning Outcomes').
+    etapa(2, 'Roteirizacao e didatica de gravacao').
+    etapa(3, 'Design de slides e apoio visual').
+    etapa(4, 'Hardware, cenario e iluminacao').
+    etapa(5, 'Sistema operacional e pos-producao').
+
+    % pergunta(Id, Etapa, Texto).
+    pergunta(1, 1, 'Qual e o tema principal da sua aula na Unreal Engine?').
+    pergunta(2, 1, 'Como voce estruturou o verbo do seu Learning Outcome?').
+    pergunta(3, 1, 'O que voce espera que o aluno faca ao assistir sua aula?').
+    pergunta(4, 2, 'Em qual ordem voce pretende gravar os arquivos do video?').
+    pergunta(5, 2, 'Como voce planeja lidar com erros ou passos dificeis?').
+    pergunta(6, 3, 'Como estao formatados os textos nos seus slides?').
+    pergunta(7, 3, 'Como esta o layout visual e grafico dos seus slides?').
+    pergunta(8, 4, 'Qual equipamento de camera voce vai utilizar?').
+    pergunta(9, 4, 'Como e o seu ambiente fisico de gravacao?').
+    pergunta(10, 4, 'Qual dispositivo de captura de audio voce vai utilizar?').
+    pergunta(11, 5, 'Qual sistema operacional voce utiliza?').
+    pergunta(12, 5, 'Qual e a sua prioridade para o software de edicao?').
+
+
+
+    % opcao(IdPergunta, Valor, Descricao).
+
+    opcao(1, 1, 'Blueprints e Logica de Gameplay').
+    opcao(1, 2, 'Iluminacao (Lumen, Sky Light, Directional Light, Ray Tracing)').
+    opcao(1, 3, 'Ambientes e Paisagens (Landscape, Foliage, Megascans)').
+    opcao(1, 4, 'Cinematografia (Cine Camera Actor, Sequencer)').
+    opcao(1, 5, 'Materiais, Texturas (Power of 2) e Fotogrametria').
+
+    opcao(2, 1, 'Usei verbos subjetivos/amplos').
+    opcao(2, 2, 'Combinei dois verbos na mesma frase').
+    opcao(2, 3, 'Usei um unico verbo cognitivo/teorico').
+    opcao(2, 4, 'Usei um unico verbo pratico/construtivo').
+
+    opcao(3, 1, 'Compreenda um conceito teorico').
+    opcao(3, 2, 'Veja os bastidores de como resolvi um problema complexo').
+    opcao(3, 3, 'Siga cada clique para construir o resultado do zero').
+
+    opcao(4, 1, 'Gravar introducao e teoria primeiro').
+    opcao(4, 2, 'Gravar pratica primeiro e introducao por ultimo').
+    opcao(4, 3, 'Gravar tudo em um unico take').
+
+    opcao(5, 1, 'Editar e cortar qualquer erro').
+    opcao(5, 2, 'Incluir um erro comum para ensinar troubleshooting').
+    opcao(5, 3, 'Pular etapas basicas para economizar tempo').
+
+    opcao(6, 1, 'Nao utilizarei slides').
+    opcao(6, 2, 'Frases completas e explicacoes detalhadas').
+    opcao(6, 3, 'Topicos curtos, palavras-chave e key takeaways').
+
+    opcao(7, 1, 'Varios prints, fontes variadas e efeitos chamativos').
+    opcao(7, 2, 'Padrao consistente e um visual por slide').
+    opcao(7, 3, 'Sem slides ou apenas texto em fundo solido').
+
+    opcao(8, 1, 'Voiceover / Narracao em off').
+    opcao(8, 2, 'Webcam embutida do notebook').
+    opcao(8, 3, 'Camera externa USB/DSLR').
+
+    opcao(9, 1, 'Luz natural e fundo movimentado').
+    opcao(9, 2, 'Luz artificial controlada e fundo com objetos').
+    opcao(9, 3, 'Luz artificial controlada e fundo profissional').
+
+    opcao(10, 1, 'Microfone interno do notebook ou webcam').
+    opcao(10, 2, 'Fone de ouvido comum').
+    opcao(10, 3, 'Headset com microfone extensivel').
+    opcao(10, 4, 'Microfone externo dedicado').
+
+    opcao(11, 1, 'Windows 10').
+    opcao(11, 2, 'Windows 11').
+    opcao(11, 3, 'macOS').
+
+    opcao(12, 1, 'Gratuito, nativo e simples').
+    opcao(12, 2, 'Gratuito, mas profissional').
+    opcao(12, 3, 'Pago, focado em educacao').
+    opcao(12, 4, 'Assinatura profissional com IA').
+
+:- dynamic resposta/2.
+    registrar_resposta(Id, Valor) :-
+        retractall(resposta(Id, _)),
+        assertz(resposta(Id, Valor)).
