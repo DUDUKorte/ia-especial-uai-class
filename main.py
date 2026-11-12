@@ -317,10 +317,10 @@ def mostrar_resultado():
 
     # Seção 2: Tabela de 5 Colunas
     secao("2. Tabela de Planejamento de Conteúdo (5 Colunas Epic)", "📋")
+
     tabela = q("gerar_tabela_segmentos(Linhas)")
     if tabela:
-        for linha in tabela.get("Linhas", []):
-            item(f"▸  {linha}")
+        criar_tabela_segmentos(pad, tabela.get("Linhas", []))
 
     # Seção 3: Roteiro e Slides
     secao("3. Diagnóstico de Roteiro, Didática e Slides", "✏️")
@@ -368,6 +368,93 @@ def mostrar_resultado():
         item(f"☐  {c}")
 
     tk.Frame(pad, height=24, bg=CORES["bg"]).pack()
+
+    
+def criar_tabela_segmentos(parent, linhas):
+    container = tk.Frame(parent, bg=CORES["bg"])
+    container.pack(fill="x", pady=8)
+
+    style = ttk.Style()
+    style.theme_use("clam")
+
+    # por algum motivo é necessário pra remover a borda (era pra tirar o hover também, mas não deu)
+    style.layout("Dark.Treeview", [
+        ("Treeview.treearea", {"sticky": "nswe"})
+    ])
+    style.layout("Dark.Treeview.Heading", [
+        ("Treeheading.cell", {"sticky": "nswe", "children": [
+            ("Treeheading.padding", {"sticky": "nswe", "children": [
+                ("Treeheading.text", {"sticky": "nswe"})
+            ]})
+        ]})
+    ])
+
+    style.configure(
+        "Dark.Treeview",
+        background=CORES["card"],
+        foreground=CORES["text_dim"],
+        fieldbackground=CORES["card"],
+        borderwidth=0,
+        relief="flat",
+        rowheight=42,
+        font=("Segoe UI", 9)
+    )
+
+    style.configure(
+        "Dark.Treeview.Heading",
+        background=CORES["box_letra"],
+        foreground=CORES["accent"],
+        font=("Segoe UI", 9, "bold"),
+        relief="flat",
+        borderwidth=0,
+        padding=10
+    )
+
+    style.map(
+        "Dark.Treeview",
+        background=[("selected", CORES["card_sel"])],
+        foreground=[("selected", CORES["text"])]
+    )
+
+    colunas = (
+        "segmento",
+        "gravacao",
+        "visual",
+        "objetivo",
+        "duracao"
+    )
+
+    tabela = ttk.Treeview(
+        container,
+        columns=colunas,
+        show="headings",
+        style="Dark.Treeview",
+        height=len(linhas)
+    )
+
+    tabela.heading("segmento", text="SEGMENTO")
+    tabela.heading("gravacao", text="GRAVAÇÃO")
+    tabela.heading("visual", text="APOIO VISUAL")
+    tabela.heading("objetivo", text="OBJETIVO PEDAGÓGICO")
+    tabela.heading("duracao", text="DURAÇÃO")
+
+    # larguras
+    tabela.column("segmento", width=150, anchor="w")
+    tabela.column("gravacao", width=120, anchor="center")
+    tabela.column("visual", width=230, anchor="w")
+    tabela.column("objetivo", width=300, anchor="w")
+    tabela.column("duracao", width=80, anchor="center")
+
+    for linha in linhas:
+        valores = [parte.strip() for parte in linha.split("|")]
+
+        if len(valores) == 5:
+            tabela.insert("", "end", values=valores)
+
+    tabela.pack(fill="x", expand=True)
+
+    return tabela
+
 
 
 # Janela principal
