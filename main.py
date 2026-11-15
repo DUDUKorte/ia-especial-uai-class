@@ -3,9 +3,12 @@ import tkinter as tk
 from tkinter import ttk
 from pyswip import Prolog
 
-# Conexão com a base de conhecimento Prolog
+# conexão com a base de conhecimento Prolog
 prolog = Prolog()
 prolog.consult((Path(__file__).parent / "regras.pl").as_posix())
+
+# dicionário pra armazenar as respostas
+respostas = {}
 
 CORES = {
     "bg":          "#0a0b0e",
@@ -152,7 +155,7 @@ def mostrar_pergunta(num):
 
     tk.Label(wrapper, text=texto, bg=CORES["bg"], fg="#ffffff", font=("Segoe UI", 18, "bold"), wraplength=720, justify="left", anchor="w").pack(fill="x", pady=(8, 20))
 
-    opcao_var = tk.IntVar(value=0)
+    opcao_var = tk.IntVar(value=respostas.get(atributo, 0))
     cards_ui = []
 
     opcoes_box = tk.Frame(wrapper, bg=CORES["bg"])
@@ -202,6 +205,9 @@ def mostrar_pergunta(num):
 
         for w in (card, inner, box, lbl_letra, lbl_desc, lbl_chk):
             w.bind("<Button-1>", lambda e, v=val, c=card, b=box, l=lbl_letra, t=lbl_desc, k=lbl_chk: selecionar(v, c, b, l, t, k))
+            # restaura visualmente a opção anteriormente selecionada
+            if respostas.get(atributo) == val:
+                selecionar(val, card, box, lbl_letra, lbl_desc, lbl_chk)
 
     msg_var = tk.StringVar(value="")
     tk.Label(wrapper, textvariable=msg_var, bg=CORES["bg"], fg=CORES["warning"], font=("Segoe UI", 9)).pack(pady=(6, 0))
@@ -219,14 +225,19 @@ def mostrar_pergunta(num):
         if escolha == 0:
             msg_var.set("⚠  Selecione uma opção para continuar.")
             return
+
+        # remove o fato anterior, caso exista
+        list(prolog.query(f"retractall(fato({atributo}, _))"))
+
+        respostas[atributo] = escolha # salva a resposta no dicionário para que seja possível mostrá-la caso o usuário volte
         prolog.assertz(f"fato({atributo}, {escolha})")
+
         if num < TOTAL_PERGUNTAS:
             mostrar_pergunta(num + 1)
         else:
             mostrar_resultado()
 
     def voltar():
-        list(prolog.query(f"retractall(fato({ATRIBUTOS[num - 2]}, _))"))
         mostrar_pergunta(num - 1)
 
     if num > 1:
@@ -457,7 +468,8 @@ def criar_tabela_segmentos(parent, linhas):
 
 
 
-# Janela principal
+# janela principal
+
 janela = tk.Tk()
 janela.title("UAI · Unreal Authorized Instructor")
 janela.geometry("880x660")

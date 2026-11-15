@@ -326,8 +326,8 @@ listar_linhas([H|T]) :-
     pergunta(6, 3, 'Como estao formatados os textos nos seus slides?').
     pergunta(7, 3, 'Como esta o layout visual e grafico dos seus slides?').
     pergunta(8, 4, 'Qual equipamento de camera voce vai utilizar?').
-    pergunta(9, 4, 'Como e o seu ambiente fisico de gravacao?').
-    pergunta(10, 4, 'Qual dispositivo de captura de audio voce vai utilizar?').
+    pergunta(9, 4, 'Qual dispositivo de captura de audio voce vai utilizar?').
+    pergunta(10, 4, 'Como e o seu ambiente fisico de gravacao?').
     pergunta(11, 5, 'Qual sistema operacional voce utiliza?').
     pergunta(12, 5, 'Qual e a sua prioridade para o software de edicao?').
 
