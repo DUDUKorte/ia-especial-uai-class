@@ -127,7 +127,7 @@ def mostrar_tela_inicial():
         centro, text="INICIAR AUDITORIA TÉCNICA  >",
         bg=CORES["accent"], fg="#0a0b0e", font=("Segoe UI", 10, "bold"),
         relief="flat", bd=0, padx=32, pady=11, cursor="hand2",
-        command=lambda: [list(prolog.query("retractall(fato(_, _))")), mostrar_pergunta(1)],
+        command=lambda: [list(prolog.query("resetar_sistema")), respostas.clear(), mostrar_pergunta(1)],
     )
     btn.pack()
 
@@ -226,11 +226,8 @@ def mostrar_pergunta(num):
             msg_var.set("⚠  Selecione uma opção para continuar.")
             return
 
-        # remove o fato anterior, caso exista
-        list(prolog.query(f"retractall(fato({atributo}, _))"))
-
-        respostas[atributo] = escolha # salva a resposta no dicionário para que seja possível mostrá-la caso o usuário volte
-        prolog.assertz(f"fato({atributo}, {escolha})")
+        respostas[atributo] = escolha
+        list(prolog.query(f"registrar_resposta({num}, {escolha})"))
 
         if num < TOTAL_PERGUNTAS:
             mostrar_pergunta(num + 1)
@@ -240,12 +237,23 @@ def mostrar_pergunta(num):
     def voltar():
         mostrar_pergunta(num - 1)
 
+    def ir_para_inicio():
+        list(prolog.query("resetar_sistema"))
+        respostas.clear()
+        mostrar_tela_inicial()
+
     if num > 1:
         tk.Button(
             botoes, text="<  VOLTAR", bg=CORES["card"], fg=CORES["text_muted"],
             font=("Segoe UI", 9, "bold"), relief="solid", bd=1, highlightbackground=CORES["border_card"],
             padx=18, pady=8, cursor="hand2", command=voltar,
-        ).pack(side="left")
+        ).pack(side="left", padx=(0, 10))
+
+    tk.Button(
+        botoes, text="⌂  INÍCIO", bg=CORES["card"], fg=CORES["text_muted"],
+        font=("Segoe UI", 9, "bold"), relief="solid", bd=1, highlightbackground=CORES["border_card"],
+        padx=18, pady=8, cursor="hand2", command=ir_para_inicio,
+    ).pack(side="left")
 
     tk.Button(
         botoes, text="PRÓXIMA  >" if num < TOTAL_PERGUNTAS else "FINALIZAR  ✓",
@@ -265,7 +273,7 @@ def mostrar_resultado():
     tk.Button(
         top, text="⟳  Novo Diagnóstico", bg=CORES["card"], fg=CORES["text_dim"],
         font=("Segoe UI", 9), relief="flat", bd=0, padx=12, pady=6, cursor="hand2",
-        command=lambda: [list(prolog.query("retractall(fato(_, _))")), mostrar_tela_inicial()],
+        command=lambda: [list(prolog.query("resetar_sistema")), respostas.clear(), mostrar_tela_inicial()],
     ).pack(side="right")
 
     tk.Frame(frame_cabecalho, height=1, bg=CORES["border"]).pack(fill="x")
