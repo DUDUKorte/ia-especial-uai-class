@@ -303,11 +303,11 @@ def mostrar_resultado():
 
     def item_status(texto):
         cor = CORES["text_dim"]
-        if any(w in texto for w in ("APROVADO", "EXCELENTE", "OTIMA", "BOM")):
+        if any(w in texto for w in ("APROVADO", "EXCELENTE", "ÓTIMA", "BOM")):
             cor = CORES["success"]
-        elif any(w in texto for w in ("ALERTA", "RECOMENDACAO", "AJUSTE")):
+        elif any(w in texto for w in ("ALERTA", "RECOMENDAÇÃO", "AJUSTE")):
             cor = CORES["warning"]
-        elif any(w in texto for w in ("REPROVADO", "CRITICO", "ERRO GRAVE")):
+        elif any(w in texto for w in ("REPROVADO", "CRÍTICO", "ERRO GRAVE")):
             cor = CORES["danger"]
         tk.Label(pad, text=f"  {texto}", bg=CORES["bg"], fg=cor, font=("Segoe UI", 9), wraplength=700, justify="left", anchor="w", padx=12).pack(fill="x", pady=2)
 
