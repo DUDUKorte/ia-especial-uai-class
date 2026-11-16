@@ -1,4 +1,4 @@
-('D:\\ia-especial-uai-class\\build\\AuditoriaPedagogica\\PYZ-00.pyz',
+('D:\\ia-especial-uai-class\\build\\main\\PYZ-00.pyz',
  [('__future__',
    'C:\\Program Files\\Python313\\Lib\\__future__.py',
    'PYMODULE'),
